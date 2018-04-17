@@ -4,7 +4,7 @@
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/sfevrun/HTML5Client/blob/master/gif/html5git1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/sfevrun/BanquesDesLoups/blob/master/gif/banquegif1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
 
