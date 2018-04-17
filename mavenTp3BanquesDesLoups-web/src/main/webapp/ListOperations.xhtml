@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> 
+    <ui:define name="body-begin">
+        <ui:param name="title" value="Liste des operations du Compte#: #{operationFMBean.compteBancaireOperation.numeroCompte} "/> <!-- Automatic create breadCrumb and page title when param 'title' is provided. --> 
+
+    </ui:define>
+    <ui:define name="body">
+
+        <f:metadata>
+            <f:viewParam name="idCompte" value="#{operationFMBean.idCompte}"/>
+            <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{operationFMBean.lireCompteParId()}"/>
+        </f:metadata>
+        <title>Liste des operations  </title>
+        
+         
+      
+        <h:form id="form">
+
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+
+                        <p:spacer width="5"/><br />
+                        <!-- <p:commandButton action="nouveau" icon="fa fa-plus"
+                                          value="Nouveau compte" styleClass="btn-primary"/>-->
+                        <p:commandButton onclick="PF('Operations').show();" icon="fa fa-plus"
+                                         value="Nouveau Operation" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                    </div>
+
+                    <p:separator/>
+                    <h3> Le solde du Compte est : #{operationFMBean.compteBancaireOperation.solde}</h3>
+                    <p:separator/>
+
+                    <p:dataTable id="operations"
+                        widgetVar="carsTable" value="#{operationFMBean.compteBancaireOperation.operations}" rows="5"
+                        rowKey="#{item.id}" lazy="true" paginator="true"
+
+                        paginatorPosition="bottom" 
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                        currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
+                        rowsPerPageTemplate="5,10,15,20,30"
+                        var="item"
+                        >
+
+
+                        <f:facet name="header">
+                            Trouver Operation par montant: <p:inputText id="inptId" />
+                            <p:spacer height="5"/>
+                            <p:commandButton id="brFind"
+                                             value="Find"
+
+                                             process="@form"
+                                             update="@form"
+                                             styleClass="btn-flat bg-black"
+                                             partialSubmit="true"/>
+                        </f:facet>
+
+                        <p:column headerText="Operation" sortBy="#{item.operation.typeOperation}" filterBy="#{item.operation.typeOperation}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.operation.typeOperation}
+                        </p:column>
+
+                        <p:column headerText="Type Operation" sortBy="#{item.code}" filterBy="#{item.code}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.code}
+                        </p:column>
+
+                        <p:column headerText="Montant" filterBy="#{item.montant}" sortBy="#{item.montant}"
+                                  filterMatchMode="contains">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.montant}
+                        </p:column>
+
+                        <p:column headerText="Frais Transaction" sortBy="#{item.frais}" filterBy="#{item.frais}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.frais}
+                        </p:column>
+
+
+                        <p:column headerText="Date Transaction" sortBy="#{item.operation.dateOperation}" filterBy="#{item.operation.dateOperation}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.operation.dateOperation}
+                        </p:column> 
+                         </p:dataTable>
+                </div>
+            </div>
+           
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
+                <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+        <h:form id="formOperation">
+            <p:dialog closable="true" widgetVar="Operations" header="Ajouter une operation" showEffect="fade" 
+                      hideEffect="explode" modal="true">
+
+                <div class="ui-g ui-fluid">
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1"> 
+
+                        <p:outputLabel value="TypeOperation:" for="typeOperation" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                        <p:selectOneMenu id="typeOperation" value="#{operationFMBean.operation.typeOperation}" title="TypeOperation" 
+                                         required="true" requiredMessage="Le type operation est obligatoire."
+                                         converter="#{operationFMBean.typeTransactionConverter}">
+
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{operationFMBean.listTypeOperation}"
+                                           var="type"
+                                           itemValue="#{typeOperation}"
+                                           itemLabel="#{typeOperation}"/>
+                        </p:selectOneMenu>
+                    </div>
+
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                        <p:outputLabel value="Montant:" for="montant" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                        <p:inputText id="montant" value="#{operationFMBean.detailsoperation.montant}" title="Montant" />
+                    </div> 
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+
+                        <p:outputLabel value="Frais:" for="frais" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                        <p:inputText id="frais" value="#{operationFMBean.detailsoperation.frais}" title="Frais" />
+                    </div>
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                        <p:outputLabel value="Compte Vir:" for="numeroComteBancairecr" />
+                    </div>
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                        
+                <p:autoComplete id="numeroComteBancairecr"
+                        value="#{operationFMBean.compteBancaireCR}"   
+                        completeMethod="#{operationFMBean.geCompteByNumeroCompte(numeroCompte)}" 
+                        converter="#{operationFMBean.compteBancaireConverter}"
+                        var="c"
+                        itemLabel="#{c.numeroCompte}"
+                        itemValue="#{c}"
+                        forceSelection="true"
+                        required="true"/>
+                           
+                    </div>
+
+
+                    <p:separator/>
+
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+
+                    </div>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                            <p:commandButton id="update" value="Update" action="#{operationFMBean.update()}" styleClass="btn-primary"/>
+
+                        </div>
+
+                        <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                            <p:commandButton 
+                                id="back" value="Close" immediate="true" onclick="PF('Operations').hide();"  styleClass="btn-success"/>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+            </p:dialog>
+            
+        </h:form>
+            
+    </ui:define>
+</ui:composition>

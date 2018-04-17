@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"> 
+
+    <ui:define name="body">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{typeCompteMbean.preRenderView()}"/>
+        </f:metadata>
+          <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    
+                      <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton onclick="PF('TYPECOMPTE').show();" icon="fa fa-plus"
+                                         value="Nouveau Type" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                    </div>
+
+                    <p:separator/>
+                    <f:view>
+                        <h1><h:outputText value="List"/></h1>
+                        <p:dataTable value="#{typeCompteMbean.typeComptes}" var="item">
+                           <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="TypeCompte"/>
+                                </f:facet>
+                                <h:outputText value="#{item.typeCompte}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Description"/>
+                                </f:facet>
+                                <h:outputText value="#{item.description}"/>
+                            </p:column>
+
+                            <p:column   headerText="Editer" width="60" style="text-align: center">
+                                
+                               
+                                <p:commandButton id="back"  icon="fa fa-edit"   styleClass="btn-success btn-xs" immediate="true" action="#{typeCompteMbean.edit()}" process="@this" update="formTypeCompte" oncomplete="PF('TYPECOMPTE').show();" >
+                                    <f:param name="id" value="#{item.id}" />
+                                </p:commandButton>
+                                  </p:column> 
+                           <p:column  headerText="Supprimer" width="85" style="text-align: center">
+                                <p:commandButton id="update"  icon="fa fa-remove"  styleClass="btn-danger btn-xs" action="#{typeCompteMbean.remove()}">
+                                    <f:param name="id" value="#{item.id}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </f:view>
+                </div>
+            </div>
+            </h:form>
+        
+        
+         <h:form id="formTypeCompte">
+            <p:dialog closable="true" widgetVar="TYPECOMPTE" header="Add Edit Type Copte" showEffect="fade" 
+                      hideEffect="explode" modal="true">
+                <f:view>
+
+
+                    <h:form>
+                        <div class="ui-g ui-fluid">
+                            
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1"> 
+                                    <p:outputLabel value="TypeCompte:" for="typeCompte" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11"> 
+                                 <p:inputText id="typeCompte" value="#{typeCompteMbean.typeCompte.typeCompte}" title="TypeCompte" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                      <p:outputLabel value="Description:" for="description" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11">
+                                           <p:inputText id="description" value="#{typeCompteMbean.typeCompte.description}" title="Description" />
+                                </div>
+  <p:separator/>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+
+                                </div>
+
+                                <div id="main-buttons" class="hidden-sm hidden-xs">
+
+
+                                    <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                                        <p:commandButton id="update" value="Update" action="#{typeCompteMbean.update()}" oncomplete="editarDialog.hide();"  styleClass="btn-success"/>
+                                    </div>
+                                    <div class="ui-g-12 ui-lg-6 ui-xl-11">
+
+                                        <p:commandButton value="Cancel"  oncomplete="editarDialog.hide();"  styleClass="btn-primary"/>
+
+
+                                    </div>
+                                    
+           
+                                    
+                                    
+                                    
+                                    
+                                </div>    
+
+
+                        </div>
+                    </h:form>
+
+                </f:view>
+
+
+            </p:dialog>
+
+            <p:dialog header="Effects" widgetVar="MOTDEPWD" showEffect="explode" hideEffect="bounce" height="100">
+                <h:outputText value="Mot de passe restaure" />
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

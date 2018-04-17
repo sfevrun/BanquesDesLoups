@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> 
+
+    <ui:define name="body">
+        <f:metadata>
+        <f:viewParam name="id" value="#{compteMBean.id}"/>
+        <f:viewParam name="idClient" value="#{compteMBean.idClient}"/>
+         <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{compteMBean.lireCompteParId()}"/>
+    </f:metadata>
+
+   
+    
+        <f:view>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+
+
+                        <h:form>
+                            <h3>Creer compte bancaire pour le client : #{compteMBean.client}</h3>
+                            <p:separator/>
+                            <div class="ui-g ui-fluid">
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="Numero Compte:" for="numeroCompte" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                                    <p:inputText id="numeroCompte" value="#{compteMBean.compteBancaire.numeroCompte}" title="NumeroCompte" required="true" requiredMessage="The NumeroCompte field is required."/>
+                                </div>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="Description:" for="descriotion" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+
+                                    <p:inputText id="descriotion" value="#{compteMBean.compteBancaire.descriotion}" title="Descriotion" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="Date Creation (MM/dd/yyyy):" for="dateCreation" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                        
+                                    <p:calendar id="dateCreation" value="#{compteMBean.compteBancaire.dateCreation}" title="DateCreation" >
+                                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                                    </p:calendar>
+                                </div>
+                               
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="statutCompte:" for="statutCompte" />
+
+                                </div>
+                              <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                                  <p:selectOneMenu id="statutCompte" value="#{compteMBean.compteBancaire.statut}" title="Statut Compte"
+                                                     required="true" requiredMessage="Le type est obligatoire."
+                                                     converter="#{compteMBean.statutCompteConverter}" >
+                                        <!-- TODO: update below reference to list of available items-->
+                                        <f:selectItems value="#{compteMBean.listStatutCompte}"
+                                                       var="typeComte"
+                                                       itemValue="#{typeComte}"
+                                                       itemLabel="#{typeComte}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="TypeCompte:" for="typeCompte" />
+
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                                    <p:selectOneMenu id="typeCompte" value="#{compteMBean.compteBancaire.typeCompte}" title="TypeCompte"
+                                                     required="true" requiredMessage="Le type est obligatoire."
+                                                     converter="#{compteMBean.typeCompteCodeConverter}" >
+                                        <!-- TODO: update below reference to list of available items-->
+                                        <f:selectItems value="#{compteMBean.allTypeComptes}"
+                                                       var="typeComte"
+                                                       itemValue="#{typeComte}"
+                                                       itemLabel="#{typeComte.typeCompte}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="Solde:" for="solde" />
+
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11" >
+                                    <p:inputText id="solde" value="#{compteMBean.compteBancaire.solde}" title="Solde" />
+                                </div>
+                                 <p:separator/>
+                                    <div id="main-buttons" class="hidden-sm hidden-xs">
+
+                                   <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                                        <p:commandButton   id="back" icon="fa fa-reply" value="Back" immediate="true" action="#{compteMBean.listComptebancaire()}"  styleClass="btn-primary"/>
+                                    </div>
+                                    <div class="ui-g-12 ui-lg-6 ui-xl-11">
+
+                                        <p:commandButton  id="update" value="Update" action="#{compteMBean.update()}" styleClass="btn-success"/>
+
+
+                                    </div>
+                                 
+                                    </div>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </f:view>
+
+    </ui:define>
+</ui:composition>
+

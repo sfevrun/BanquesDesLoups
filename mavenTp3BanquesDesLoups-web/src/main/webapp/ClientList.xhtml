@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> 
+
+
+
+    <ui:define name="body-begin">
+        <ui:param name="title" value="Liste des clients"/> <!-- Automatic create breadCrumb and page title when param 'title' is provided. --> 
+    </ui:define>
+    <ui:define name="body">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{clientMbean.preRenderView()}"/>
+        </f:metadata>
+        <title>Liste des Clients</title>
+
+
+        <h:form>
+            
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+
+                        <p:spacer width="5"/><br />
+                        <!-- <p:commandButton action="nouveau" icon="fa fa-plus"
+                                          value="Nouveau compte" styleClass="btn-primary"/>-->
+                        <p:commandButton onclick="PF('CLIENT').show();" icon="fa fa-plus"
+                                         value="Nouveau Client" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                    </div>
+
+
+
+                    <p:separator/>
+
+
+                    <p:dataTable 
+                        widgetVar="carsTable" value="#{clientMbean.clients}" rows="5"
+                        rowKey="#{item.id}" lazy="true" paginator="true"
+
+                        paginatorPosition="bottom" 
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                        currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
+                        rowsPerPageTemplate="5,10,15,20,30"
+                        var="item"
+                        >
+
+
+                        <f:facet name="header">
+                            Trouver client par nom: <p:inputText id="inptId" />
+                            <p:spacer height="5"/>
+                            <p:commandButton id="brFind"
+                                             value="Find"
+
+                                             process="@form"
+                                             update="@form"
+                                             styleClass="btn-flat bg-black"
+                                             partialSubmit="true"/>
+                        </f:facet>
+
+                        <p:column headerText="CIN" sortBy="#{item.cin}" filterBy="#{item.cin}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.cin}
+                        </p:column>
+
+                        <p:column headerText="Nom" filterBy="#{item.nom}" sortBy="#{item.nom}"
+                                  filterMatchMode="contains">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.nom}
+                        </p:column>
+
+                        <p:column headerText="Prenom" sortBy="#{item.prenom}" filterBy="#{item.prenom}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.prenom}
+                        </p:column>
+
+
+                        <p:column headerText="Date Naissance" sortBy="#{item.dateNaissance}" filterBy="#{item.dateNaissance}">
+                            <f:facet name="filter">
+
+                            </f:facet>
+                            #{item.dateNaissance}
+                        </p:column> 
+                        <p:column   headerText="Editer" width="60" style="text-align: center">
+                            <p:commandButton id="back"  action="#{clientMbean.edit}"  icon="fa fa-edit" process="@this" update="formUser" oncomplete="PF('CLIENT').show();" styleClass="btn-success btn-xs">
+                                <f:param name="id" value="#{item.id}" />
+                            </p:commandButton>
+                         </p:column>
+                            <p:column  headerText="Selectionner"  width="100" style="text-align: center">
+
+                                <p:button id="Select" icon="fa fa-search"  styleClass="btn-warning btn-xs"  outcome="EditerCompteBancaire?idClient=#{item.id}"/>
+                            </p:column>
+                       
+                        <p:column  headerText="Supprimer" width="85" style="text-align: center">
+                            <p:commandButton id="update"  icon="fa fa-remove"  styleClass="btn-danger btn-xs" action="#{clientMbean.remove()}">
+                                <f:param name="id" value="#{item.id}" />
+                            </p:commandButton>
+                        </p:column>
+
+                       
+                    </p:dataTable>
+                </div>
+            </div>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
+                <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+        <h:form id="formUser">
+            <p:dialog closable="true" widgetVar="CLIENT" header="Add edit CLIENT" showEffect="fade" 
+                      hideEffect="explode" modal="true">
+
+                <div class="ui-g ui-fluid">
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1"> 
+
+
+
+                        <p:outputLabel value="Nom:" for="nom" />
+                    </div> 
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11">
+                        <p:inputText id="nom" value="#{clientMbean.client.nom}"/>
+                    </div>
+
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                        <p:outputLabel value="Prenom" for="prenom"/>
+                    </div>
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11">
+                        <p:inputText id="prenom" value="#{clientMbean.client.prenom}"/>
+                    </div>
+                    
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                        <p:outputLabel value="CIN" for="CIN"/>
+                    </div>
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11">
+                        <p:inputText id="CIN" value="#{clientMbean.client.cin}"/>
+                    </div>
+
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">  
+                        <p:outputLabel value="DateNaissance:" for="dateNaissance" />
+                    </div>   
+                    <div class="ui-g-12 ui-lg-10 ui-xl-11">
+                        <p:calendar id="dateNaissance" value="#{clientMbean.client.dateNaissance}" title="DateNaissance" >
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </p:calendar>
+                    </div>
+
+                    <p:separator/>   
+
+                    <div class="ui-g-12 ui-lg-2 ui-xl-1">
+
+                    </div>
+
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                            <p:commandButton id="update" value="Update" action="#{clientMbean.update()}" styleClass="btn-primary"/>
+
+                        </div>
+
+                        <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                            <p:commandButton 
+                                id="back" value="Close" immediate="true" onclick="PF('CLIENT').hide();"  styleClass="btn-success"/>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+
+            </p:dialog>
+
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+

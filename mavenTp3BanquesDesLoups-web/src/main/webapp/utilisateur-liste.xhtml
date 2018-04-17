@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> 
+
+    <ui:define name="body">
+
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{utilisateurMBean.preRenderView()}"/>
+        </f:metadata>
+        <h:form id="formtableuser">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton onclick="PF('UTILISATEUR').show();" icon="fa fa-plus"
+                                         value="Nouveau utilisateur" styleClass="btn-primary"/>
+                        <p:spacer width="5"/>
+
+                    </div>
+
+                    <p:separator/>
+
+                    <f:view>
+
+
+                       
+                            <h1><h:outputText value="List"/></h1>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            <p:dataTable value="#{utilisateurMBean.allUtilisateurs}" var="item">
+                                <p:column headerText="Type" filterBy="#{item.type}" sortBy="#{item.type}"
+                                          filterMatchMode="contains" width="20%">
+                                    <f:facet name="filter">
+                                    
+                                    </f:facet>
+                                    <h:outputText value="#{item.type}"  converter="#{utilisateurMBean.statutUtilisateurConverter}"/>
+                                </p:column>
+                                <p:column  headerText="User Role" filterBy="#{item.roleUser}" sortBy="#{item.roleUser}"
+                                  filterMatchMode="contains" width="20%">
+                                    <f:facet name="Filter">
+                                      
+                                    </f:facet>
+                                    <h:outputText value="#{item.roleUser}" converter="#{utilisateurMBean.roleUserConverter}"/>
+                                </p:column>
+                                <p:column  headerText="Email" filterBy="#{item.email}" sortBy="#{item.email}"
+                                  filterMatchMode="contains" width="20%">
+                                    <f:facet name="filter">
+                                     
+                                    </f:facet>
+                                    <h:outputText value="#{item.email}"/>
+                                </p:column>
+                                <p:column headerText="STATUT" 
+                                  filterMatchMode="contains"  width="85"  style="text-align: center">
+                                    <p:commandButton  id="statut" value="#{item.type}"  styleClass="btn-primary btn-xs" update="formtableuser" action="#{utilisateurMBean.changeStaut()}" immediate="true"> 
+                                        <f:param  name="id" value="#{item.id}" />
+                                    </p:commandButton>
+                                        </p:column> 
+                           <p:column  headerText="Reset" width="60"  style="text-align: center">
+                                    <p:commandButton id="back"   icon="fa fa-refresh"  styleClass="btn-success btn-xs"   action="#{utilisateurMBean.restaureMotdePasse()}" immediate="true">
+                                        <f:param  name="id" value="#{item.id}" />
+                                    </p:commandButton>
+                                   </p:column> 
+                           <p:column  headerText="Supprimer" width="85" style="text-align: center">
+                                    <p:commandButton  id="update"  icon="fa fa-remove"  styleClass="btn-danger btn-xs" action="#{utilisateurMBean.remove()}" >
+                                        <f:param name="id" value="#{item.id}"/>
+                                    </p:commandButton >
+                                </p:column>
+                            </p:dataTable>
+                        
+                    </f:view>
+
+
+
+                </div>
+            </div>
+        </h:form >
+        <h:form id="formUser">
+            <p:dialog closable="true" widgetVar="UTILISATEUR" header="Add Edit Utilisateur" showEffect="fade" 
+                      hideEffect="explode" modal="true">
+                <f:view>
+
+
+                    <h:form>
+                        <div class="ui-g ui-fluid">
+                            
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1"> 
+                                    <p:outputLabel value="RoleUser:" for="code" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11"> 
+                                    <p:selectOneMenu id="code" value="#{utilisateurMBean.utilisateur.roleUser}" title="Role User" 
+                                                     required="true" requiredMessage="Le role utilisateur est obligatoire."
+                                                     converter="#{utilisateurMBean.roleUserConverter}">
+
+                                        <!-- TODO: update below reference to list of available items-->
+                                        <f:selectItems value="#{utilisateurMBean.listTypeRoleUser}"
+                                                       var="code"
+                                                       itemValue="#{code}"
+                                                       itemLabel="#{code}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+                                    <p:outputLabel value="Email:" for="email" />
+                                </div>
+                                <div class="ui-g-12 ui-lg-10 ui-xl-11">
+                                    <p:inputText id="email" value="#{utilisateurMBean.utilisateur.email}"  type="email" placeholder="exemple@gmail.com"
+                                                 title="Email" required="true" requiredMessage="The Email field is required."/>
+                                </div>
+  <p:separator/>
+                                <div class="ui-g-12 ui-lg-2 ui-xl-1">
+
+                                </div>
+
+                                <div id="main-buttons" class="hidden-sm hidden-xs">
+
+
+                                    <div class="ui-g-12 ui-lg-6 ui-xl-11">
+                                        <p:commandButton id="update" value="Update" action="#{utilisateurMBean.update()}"   styleClass="btn-success"/>
+                                    </div>
+                                    <div class="ui-g-12 ui-lg-6 ui-xl-11">
+
+                                        <p:commandButton value="Cancel"    styleClass="btn-primary"/>
+
+
+                                    </div>
+                                </div>    
+
+
+                        </div>
+                    </h:form>
+
+                </f:view>
+
+
+            </p:dialog>
+
+            <p:dialog header="Effects" widgetVar="MOTDEPWD" showEffect="explode" hideEffect="bounce" height="100">
+                <h:outputText value="Mot de passe restaure" />
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+
+
+
+
+</ui:composition>

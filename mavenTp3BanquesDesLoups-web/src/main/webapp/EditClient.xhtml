@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> 
+
+    <ui:define name="body">
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Nom:" for="nom" />
+                    <h:inputText id="nom" value="#{clientMbean.client.nom}" title="Nom" />
+                    <h:outputLabel value="Prenom:" for="prenom" />
+                    <h:inputText id="prenom" value="#{clientMbean.client.prenom}" title="Prenom" />
+                    <h:outputLabel value="DateNaissance:" for="dateNaissance" />
+                    <h:inputText id="dateNaissance" value="#{clientMbean.client.dateNaissance}" title="DateNaissance" >
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    
+                    <h:commandButton id="back" value="Back" immediate="true" action="#{clientMbean.listClient()}"/>
+                   <h:commandButton id="update" value="Update" action="#{clientMbean.update()}"/>
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+
+    </ui:define>
+</ui:composition>

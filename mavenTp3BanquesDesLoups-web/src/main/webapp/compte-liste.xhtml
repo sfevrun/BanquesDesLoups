@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"> 
+ <ui:define name="head-end">
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+        </style>
+    </ui:define>
+    
+    <ui:define name="body-begin">
+        <ui:param name="title" value="Liste des comptes"/> <!-- Automatic create breadCrumb and page title when param 'title' is provided. --> 
+    </ui:define>
+
+
+    <ui:define name="body">
+    
+       
+               <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                           <p:spacer width="5"/><br />
+                           <p:link styleClass="btn-primary" value="Nouveau compte" 
+                             outcome="ClientList" style="padding:10px"/>
+                         
+                     
+                    </div>
+
+                  
+   
+                    <p:separator/>
+                 
+                    
+                    <p:dataTable 
+                              widgetVar="carsTable" value="#{compteMBean.compteBancaires}" rows="5"
+                                 rowKey="#{item.id}" lazy="true" paginator="true"
+                             
+                                 paginatorPosition="bottom" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}"
+                                 currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]"
+                                 rowsPerPageTemplate="5,10,15,20,30"
+                                 var="item"
+                            >
+                             
+                        
+                           <f:facet name="header">
+                            Find Compte by id: <p:inputText id="inptId" value=""/>
+                            <p:spacer height="5"/>
+                            <p:commandButton id="brFind"
+                                             value="Find"
+                                         
+                                             process="@form"
+                                             update="@form"
+                                             styleClass="btn-flat bg-black"
+                                             partialSubmit="true"/>
+                        </f:facet>
+                        
+                    
+                        
+                        <p:column headerText="Numero Compte" filterBy="#{item.numeroCompte}" sortBy="#{item.numeroCompte}"
+                                  filterMatchMode="contains">
+                            <f:facet name="filter">
+                             
+                            </f:facet>
+                            #{item.numeroCompte}
+                        </p:column>
+                        
+                        <p:column headerText="Nom client" sortBy="#{item.client.nom}" filterBy="#{item.client.nom}">
+                            <f:facet name="filter">
+                             
+                            </f:facet>
+                             #{item.client.nom} #{item.client.prenom}
+                        </p:column>
+                        
+                        
+                        <p:column headerText="Date creation" sortBy="#{item.dateCreation}" filterBy="#{item.dateCreation}">
+                            <f:facet name="filter">
+                          
+                            </f:facet>
+                            #{item.dateCreation}
+                        </p:column>   
+                        
+                         <p:column headerText="Type du compte" sortBy="#{item.typeCompte.typeCompte}" filterBy="#{item.typeCompte.typeCompte}">
+                            <f:facet name="filter">
+                             
+                            </f:facet>
+                            #{item.typeCompte.typeCompte}
+                        </p:column>   
+                        
+                        <p:column headerText="statut du compte" sortBy="#{item.typeCompte.typeCompte}" filterBy="#{item.typeCompte.typeCompte}">
+                            <f:facet name="filter">
+                             
+                            </f:facet>
+                            #{item.statut}
+                        </p:column>  
+                        
+                         <p:column headerText="Description" sortBy="#{item.descriotion}" filterBy="#{item.descriotion}">
+                            <f:facet name="filter">
+                              
+                            </f:facet>
+                           #{item.descriotion} 
+                        </p:column>   
+                        
+                        
+                            <p:column headerText="Solide" sortBy="#{item.solde}" filterBy="#{item.solde}">
+                            <f:facet name="filter">
+                          
+                            </f:facet>
+                           #{item.solde}
+                        </p:column>   
+                        
+                            <p:column  headerText="Editer"  width="100" style="text-align: center">
+
+                                <p:button id="Editer" icon="fa fa-edit"  styleClass="btn-warning btn-xs"  outcome="EditerCompteBancaire?id=#{item.id}"/>
+                            </p:column>
+                           <p:column  headerText="Operation"  width="100" style="text-align: center">
+
+                                <p:button id="operation" icon="fa fa-search"  styleClass="btn-warning btn-xs"  outcome="ListOperations?idCompte=#{item.id}"/>
+                            </p:column>
+                       
+                        
+                        
+                        
+               
+            
+                </p:dataTable>
+                </div>
+            </div>
+     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger">
+                <p:commandButton value="Yes" type="button" styleClass="btn-primary ui-confirmdialog-yes"
+                                 icon="fa fa-check"/>
+                <p:commandButton value="No" type="button" styleClass="btn-danger ui-confirmdialog-no"
+                                 icon="fa fa-close"/>
+            </p:confirmDialog>
+        </h:form>
+      
+    </ui:define>
+
+
+    
+  
+
+</ui:composition>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Tp3 comptes bancaires des loups</title>
+    </h:head>
+    <h:body>
+        <h:link value="Creer un nouveau Compte Bancaire" outcome="ClientList"/><br />
+        <h:link value="Creer un nouveau type Compte" outcome="ListTypeCompte"/><br />
+        <h:link value="Creer les operations" outcome="ListOperations"/><br />
+        <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{compteMBean.preRenderView()}"/>
+        <h1>Gestionnaire des Comptes bancaires des loups</h1>
+        <h2> Creer compte de test</h2>
+        <h:form>
+            <h:commandButton action="#{compteMBean.creerDonneTest()}" value= "creer donnees test"/>
+
+
+        </h:form>
+        <h2> Liste des comptes</h2>
+
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <p:dataTable paginator="true" rows="10"  
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                             rowsPerPageTemplate="5,10,15"
+                             value="#{compteMBean.compteBancaires}" var="item">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="NumeroCompte"/>
+                        </f:facet>
+                        <h:button outcome="EditerCompteBancaire?id=#{item.id}" value="#{item.numeroCompte}"/>
+
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Descriotion"/>
+                        </f:facet>
+                        <h:outputText value="#{item.descriotion}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="DateCreation"/>
+                        </f:facet>
+                        <h:outputText value="#{item.dateCreation}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="TypeCompteBancaire"/>
+                        </f:facet>
+                        <h:outputText value="#{item.typeCompte.typeCompte}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Client"/>
+                        </f:facet>
+                        <h:outputText value="#{item.client.nom} #{item.client.prenom}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Solde"/>
+                        </f:facet>
+                        <h:outputText value="#{item.solde}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </f:view>
+
+        <br />
+        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+    </h:body>
+</html>
+
